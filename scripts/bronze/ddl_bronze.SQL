@@ -1,11 +1,23 @@
+---create Database 'Datawarehouse'
+USE MASTER;
+CREATE DATABASE Datawarehouse
+USE Datawarehouse;
+
+CREATE SCHEMA BRONZE;
+go
+CREATE SCHEMA Silver;
+go
+CREATE SCHEMA Gold;
+go
+
+---creating the tables in bronze layer--
 --CREATE TABLE BRONZE.crm_cust_info---
-Create or alter procedure Bronze.load_bronze As begin
 
 IF OBJECT_ID('bronze.crm_cust_info', 'U') IS NOT NULL
     DROP TABLE bronze.crm_cust_info;
 
 create table BRONZE.crm_cust_info (
-	customer_id INT IDENTITY(1,1) PRIMARY KEY,
+	cst_id INT,
 	cst_key NVARCHAR(50),
 	cst_firstname NVARCHAR(50),
 	cst_lastname nVARCHAR(50),
@@ -19,7 +31,7 @@ DROP TABLE bronze.crm_prd_info;
 GO
 
 create table BRONZE.crm_prd_info (
-	prd_id INT IDENTITY(1,1) PRIMARY KEY,
+	prd_id INT,
 	prd_key NVARCHAR(50),
 	prd_nm NVARCHAR(50),
 	prd_cost INT,
@@ -76,7 +88,7 @@ CREATE TABLE bronze.erp_px_cat_g1v2 (
 );
 GO
 
---laoding table into the source tablea--
+--loading table into the source tablea--
 truncate table BRONZE.crm_cust_info;
 Bulk Insert BRONZE.crm_cust_info
 from'C:\Users\abiod\AppData\Local\Temp\d8510e18-81f0-428d-be9a-beeb32a75ec1_dbc9660c89a3480fa5eb9bae464d6c07.zip.ec1\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
@@ -129,4 +141,4 @@ with (
 firstrow = 2,
 fieldterminator = ',',
 tablock
-);
+)
